@@ -37,18 +37,18 @@ def current_weather(lat, lon):
     result = {
         'city': data['location']['name'],  # Город
         'time': data['current']['last_updated'],  # Время обновления данных
-        'temp': 'необходимо реализовать по таблице',  # TODO Реализовать вычисление температуры из данных полученных от API
-        'feels_like_temp': 'необходимо реализовать по таблице',  # TODO Реализовать вычисление ощущаемой температуры из данных полученных от API
-        'pressure': 'необходимо реализовать по таблице',  # TODO Реализовать вычисление давления из данных полученных от API
-        'humidity': 'необходимо реализовать по таблице',  # TODO Реализовать вычисление влажности из данных полученных от API
-        'wind_speed': 'необходимо реализовать по таблице',  # TODO Реализовать вычисление скорости ветра из данных полученных от API
-        'wind_gust': 'необходимо реализовать по таблице',  # TODO Реализовать вычисление скорости порывов ветка из данных полученных от API
+        'temp': data['current']['temp_c'],  # TODO Реализовать вычисление температуры из данных полученных от API
+        'feels_like_temp': data['current']['feelslike_c'],  # TODO Реализовать вычисление ощущаемой температуры из данных полученных от API
+        'pressure': data['current']['pressure_mb'],  # TODO Реализовать вычисление давления из данных полученных от API
+        'humidity': data['current']['humidity'],  # TODO Реализовать вычисление влажности из данных полученных от API
+        'wind_speed': data['current']['wind_kph'],  # TODO Реализовать вычисление скорости ветра из данных полученных от API
+        'wind_gust': data['current']['gust_kph'],  # TODO Реализовать вычисление скорости порывов ветка из данных полученных от API
         'wind_dir': DIRECTION_TRANSFORM.get(data['current']['wind_dir'].lower()),  # Направление ветра
     }
     return result
 
 
 if __name__ == "__main__":
-    pprint(current_weather(59.93, 30.31))  # Проверка работы для координат Санкт-Петербурга
-https://api.weatherapi.com/v1/current.json?key=21ba02140eb74945ad570759251805&q=48.50,2.20
-curl -H "X-Yandex-Weather-Key: f78f06fd-7d15-4c4c-ab3c-0b8fbd445182" "https://api.weather.yandex.ru/v2/forecast?lat=48.50&lon=2.20"
+    pprint(current_weather(48.85, 2.35))  # Проверка работы для координат Санкт-Петербурга
+# https://api.weatherapi.com/v1/current.json?key=21ba02140eb74945ad570759251805&q=48.50,2.20
+# curl -H "X-Yandex-Weather-Key: f78f06fd-7d15-4c4c-ab3c-0b8fbd445182" "https://api.weather.yandex.ru/v2/forecast?lat=48.50&lon=2.20"
