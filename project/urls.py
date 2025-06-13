@@ -18,13 +18,10 @@ from django.contrib import admin
 from django.urls import path
 
 from django.contrib import admin
-from django.urls import path
-from random import random
 from django.http import HttpResponse
+from django.urls import path, include
+from random import random
 from app_datetime.views import datetime_view
-from app_datetime.views import dynamic_datetime_view
-from app_store.views import product_view_json
-from app_store.views import shop_view
 
 def random_view(request):
     if request.method == "GET":
@@ -51,9 +48,8 @@ def dynamic_random_view(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('random/', random_view),
-    path('dynamic_random/', dynamic_random_view),
     path('datetime/', datetime_view),
-    path ('dynamic_datetime/', dynamic_datetime_view),
-    path ('product/', product_view_json),
-    path('', shop_view),
+    path('', include('app_store.urls')),
+    path('', include('app_login.urls')),
+    path('', include('wishlist.urls')),
 ]
