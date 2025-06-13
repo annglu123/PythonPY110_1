@@ -47,7 +47,7 @@ def shop_view(request):
                 data = filtering_category(DATABASE, category_key, ordering_key)
         else:
             data = filtering_category(DATABASE, category_key)
-        return render(request, 'store/shop.html', context= {'products': data, 'category': category_key})
+        return render(request, 'app_store/shop.html', context= {'products': data, 'category': category_key})
 
 def product_page_view(request, page):
     if request.method == 'GET':
@@ -58,7 +58,7 @@ def product_page_view(request, page):
 
                     # with open (f'store/products/{page}.html', encoding= 'utf-8') as f:
                     #     data = f.read()
-                    return render(request, "store/product.html", context={"product": prod,
+                    return render(request, "app_store/product.html", context={"product": prod,
                                                                           "category_product": category_product[:5]})
         elif isinstance(page, int):
             prod = DATABASE.get(str(page))
@@ -67,7 +67,7 @@ def product_page_view(request, page):
                                     if el['name'] != prod['name']]
                 # with open(f'store/products/{prod["html"]}.html', encoding= 'utf-8') as f:
                 #     data = f.read()
-                return render(request, "store/product.html", context={"product": prod,
+                return render(request, "app_store/product.html", context={"product": prod,
                                                                       "category_product":  category_product[:5]})
         return HttpResponse(status=404)
 
@@ -86,7 +86,7 @@ def cart_view(request):
             product['price_total'] = round(count * product['price_after'],2)  # добавление общей цены позиции с ограничением в 2 знака
             # 3. добавьте product в список products
             products.append(product)
-        return render(request, "store/cart.html", context={"products": products})
+        return render(request, "app_store/cart.html", context={"products": products})
 
 @login_required(login_url='login:login_view')
 def cart_add_view(request, id_product):
@@ -168,13 +168,13 @@ def cart_buy_now_view(request, id_product):
     if request.method == "GET":
         result = add_to_cart(request, id_product)
         if result:
-            return redirect("store:cart_view")
+            return redirect("app_store:cart_view")
         return HttpResponseNotFound("Неудачное добавление в корзину")
 
 def cart_remove_view(request, id_product):
     if request.method == "GET":
         result = remove_from_cart(request, id_product)  # TODO Вызвать функцию удаления из корзины
         if result:
-            return redirect("store:cart_view")  # TODO Вернуть перенаправление на корзину
+            return redirect("app_store:cart_view")  # TODO Вернуть перенаправление на корзину
         return HttpResponseNotFound("Неудачное удаление из корзины")
 
