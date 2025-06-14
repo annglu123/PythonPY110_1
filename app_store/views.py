@@ -10,6 +10,7 @@ from logic.control_cart import view_in_cart, remove_from_cart, add_to_cart
 from app_store.models import DATABASE
 from logic.services import filtering_category
 
+
 # Create your views here.
 def product_(request):
     if request.method == 'GET':
@@ -100,6 +101,7 @@ def cart_add_view(request, id_product):
                             status=404,
                             json_dumps_params={'ensure_ascii': False})
 
+@login_required(login_url='login:login_view')
 def cart_del_view(request, id_product):
     if request.method == "GET":
         result = remove_from_cart(request, id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
@@ -142,8 +144,8 @@ def delivery_estimate_view(request):
                               "fix_price": 100,
                              },
                   "Беларусь":{
-                               "Могилев":{"price": 250},
-                               "Витебск":{"price": 140},
+                               "Минск":{"price": 270},
+                               "Брест":{"price": 160},
                                "fix_price": 300
                              }
                   }
@@ -171,6 +173,7 @@ def cart_buy_now_view(request, id_product):
             return redirect("app_store:cart_view")
         return HttpResponseNotFound("Неудачное добавление в корзину")
 
+@login_required(login_url='login:login_view')
 def cart_remove_view(request, id_product):
     if request.method == "GET":
         result = remove_from_cart(request, id_product)  # TODO Вызвать функцию удаления из корзины
