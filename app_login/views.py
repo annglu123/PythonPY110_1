@@ -1,6 +1,6 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect
-from logic.services import add_user_to_cart, add_to_wishlist, add_user_to_wishlist
+from logic.services import add_user_to_cart, add_user_to_wishlist
 
 
 def login_view(request):
@@ -22,4 +22,4 @@ from django.contrib.auth import logout
 def logout_view(request):
     if request.method == "GET":
         logout(request)  # Функция разлогинивает пользователя
-        return redirect("store:shop_view") # TODO Верните редирект на главную страницу
+        return redirect("app_store:shop_view") # TODO Верните редирект на главную страницу

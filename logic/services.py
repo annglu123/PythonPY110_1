@@ -29,8 +29,7 @@ def filtering_category(database: dict[str, dict],
         # [product for product in database.values() if ...] подумать, что за фильтрующее условие можно применить.
         # Сравните значение категории продукта со значением category_key
     else:
-        result = [prod for prod in
-                  database.values()]  # TODO Трансформируйте словарь словарей database в список словарей
+        result = [prod for prod in database.values()]  # TODO Трансформируйте словарь словарей database в список словарей
 
         # В итоге должен быть [dict, dict, dict, ...], где dict - словарь продукта из database
     if ordering_key is not None:
@@ -129,10 +128,8 @@ def add_user_to_cart(request, username: str) -> None:
     :param username: Имя пользователя
     :return: None
     """
-    cart_users = view_in_cart(request)  # Чтение всей базы корзин
-
+    cart_users = view_in_cart(request)
     cart = cart_users.get(username)  # Получение корзины конкретного пользователя
-
     if not cart:  # Если пользователя до настоящего момента не было в корзине, то создаём его и записываем в базу
         with open('cart.json', mode='w', encoding='utf-8') as f:
             cart_users[username] = {'products': []}

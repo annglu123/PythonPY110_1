@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user
 from django.http import HttpResponse, JsonResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render
-from unicodedata import category
 from django.shortcuts import redirect
 from logic.control_cart import view_in_cart, remove_from_cart, add_to_cart
 from app_store.models import DATABASE
@@ -59,8 +58,7 @@ def product_page_view(request, page):
 
                     # with open (f'store/products/{page}.html', encoding= 'utf-8') as f:
                     #     data = f.read()
-                    return render(request, "app_store/product.html", context={"product": prod,
-                                                                          "category_product": category_product[:5]})
+                    return render(request, "app_store/product.html", context={"product": prod, "category_product": category_product[:5]})
         elif isinstance(page, int):
             prod = DATABASE.get(str(page))
             if prod:
@@ -68,8 +66,7 @@ def product_page_view(request, page):
                                     if el['name'] != prod['name']]
                 # with open(f'store/products/{prod["html"]}.html', encoding= 'utf-8') as f:
                 #     data = f.read()
-                return render(request, "app_store/product.html", context={"product": prod,
-                                                                      "category_product":  category_product[:5]})
+                return render(request, "app_store/product.html", context={"product": prod, "category_product":  category_product[:5]})
         return HttpResponse(status=404)
 
 @login_required(login_url='login:login_view')

@@ -23,6 +23,7 @@ from django.urls import path, include
 from random import random
 from app_datetime.views import datetime_view
 
+
 def random_view(request):
     if request.method == "GET":
         data = random()
