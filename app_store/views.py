@@ -16,7 +16,7 @@ def product_(request):
         id_ = request.GET.get("id")
         if id_:
             if id_ in DATABASE:
-                return JsonResponse(DATABASE.get(id_),json_dumps_params={'ensure_ascii': False, 'indent': 4})
+                return JsonResponse(DATABASE.get(id_), json_dumps_params={'ensure_ascii': False, 'indent': 4})
             return HttpResponseNotFound('Данного продукта нет в базе данных')
         category_key = request.GET.get("category")
         ordering_key = request.GET.get('ordering')
@@ -28,7 +28,7 @@ def product_(request):
                 data = filtering_category(DATABASE, category_key, ordering_key)
         else:
             data = filtering_category(DATABASE, category_key)
-        return JsonResponse(data, safe=False, json_dumps_params={'ensure_ascii': False, 'indent': 4})
+    return JsonResponse(data, safe=False, json_dumps_params={'ensure_ascii': False, 'indent': 4})
 
 def shop_view(request):
     if request.method == 'GET':
@@ -47,7 +47,7 @@ def shop_view(request):
                 data = filtering_category(DATABASE, category_key, ordering_key)
         else:
             data = filtering_category(DATABASE, category_key)
-        return render(request, 'app_store/shop.html', context= {'products': data, 'category': category_key})
+    return render(request, 'app_store/shop.html', context= {'products': data, 'category': category_key})
 
 def product_page_view(request, page):
     if request.method == 'GET':
@@ -67,7 +67,7 @@ def product_page_view(request, page):
                 # with open(f'store/products/{prod["html"]}.html', encoding= 'utf-8') as f:
                 #     data = f.read()
                 return render(request, "app_store/product.html", context={"product": prod, "category_product":  category_product[:5]})
-        return HttpResponse(status=404)
+    return HttpResponse(status=404)
 
 @login_required(login_url='login:login_view')
 def cart_view(request):
@@ -84,31 +84,27 @@ def cart_view(request):
             product['price_total'] = round(count * product['price_after'],2)  # добавление общей цены позиции с ограничением в 2 знака
             # 3. добавьте product в список products
             products.append(product)
-        return render(request, "app_store/cart.html", context={"products": products})
+    return render(request, "app_store/cart.html", context={"products": products})
 
 @login_required(login_url='login:login_view')
 def cart_add_view(request, id_product):
     if request.method == "GET":
         result = add_to_cart(request, id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
         if result:
-            return JsonResponse({"answer": "Продукт успешно добавлен в корзину"},
-                                json_dumps_params={'ensure_ascii': False})
+            return JsonResponse({"answer": "Продукт успешно добавлен в корзину"},json_dumps_params={'ensure_ascii': False})
 
-        return JsonResponse({"answer": "Неудачное добавление в корзину"},
-                            status=404,
-                            json_dumps_params={'ensure_ascii': False})
+    return JsonResponse({"answer": "Неудачное добавление в корзину"},
+                            status=404,json_dumps_params={'ensure_ascii': False})
 
 @login_required(login_url='login:login_view')
 def cart_del_view(request, id_product):
     if request.method == "GET":
         result = remove_from_cart(request, id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
         if result:
-            return JsonResponse({"answer": "Продукт успешно удалён из корзины"},
-                                json_dumps_params={'ensure_ascii': False})
+            return JsonResponse({"answer": "Продукт успешно удалён из корзины"}, json_dumps_params={'ensure_ascii': False})
 
-        return JsonResponse({"answer": "Неудачное удаление из корзины"},
-                            status=404,
-                            json_dumps_params={'ensure_ascii': False})
+    return JsonResponse({"answer": "Неудачное удаление из корзины"},
+                            status=404, json_dumps_params={'ensure_ascii': False})
 
 def coupon_chek_view (request, coupon_code):
     DATA_COUPON = {
@@ -129,7 +125,7 @@ def coupon_chek_view (request, coupon_code):
                 "is_valid": coupon['is_valid']
                     }
             return JsonResponse(data)
-        return HttpResponseNotFound('Неверный купон')
+    return HttpResponseNotFound('Неверный купон')
 
 def delivery_estimate_view(request):
     # База данных по стоимости доставки. Ключ - Страна; Значение словарь с городами и ценами; Значение с ключом fix_price
@@ -160,7 +156,7 @@ def delivery_estimate_view(request):
             if city_in_data:
                 return JsonResponse({"price": city_in_data['price']})
             return JsonResponse({"price": country_in_data['fix_price']})
-        return HttpResponseNotFound ('Неверные данные')
+    return HttpResponseNotFound ('Неверные данные')
 
 @login_required(login_url='login:login_view')
 def cart_buy_now_view(request, id_product):
@@ -168,7 +164,7 @@ def cart_buy_now_view(request, id_product):
         result = add_to_cart(request, id_product)
         if result:
             return redirect("app_store:cart_view")
-        return HttpResponseNotFound("Неудачное добавление в корзину")
+    return HttpResponseNotFound("Неудачное добавление в корзину")
 
 @login_required(login_url='login:login_view')
 def cart_remove_view(request, id_product):
@@ -176,5 +172,5 @@ def cart_remove_view(request, id_product):
         result = remove_from_cart(request, id_product)  # TODO Вызвать функцию удаления из корзины
         if result:
             return redirect("app_store:cart_view")  # TODO Вернуть перенаправление на корзину
-        return HttpResponseNotFound("Неудачное удаление из корзины")
+    return HttpResponseNotFound("Неудачное удаление из корзины")
 

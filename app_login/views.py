@@ -1,11 +1,12 @@
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
-from logic.services import add_user_to_cart, add_user_to_wishlist
+
+from logic.services import add_user_to_cart, add_to_wishlist, add_user_to_wishlist
 
 
 def login_view(request):
     if request.method == "GET":
-        return render(request, "login/login.html")
+        return render(request,"login/login.html")
 
     if request.method == "POST":
         data = request.POST
@@ -15,7 +16,7 @@ def login_view(request):
             add_user_to_cart(request,user.username)
             add_user_to_wishlist(request,user.username)
             return redirect("/")
-        return render(request, "login/login.html", context={"error": "Неверные данные"})
+        return render(request,"login/login.html", context={"error": "Неверные данные"})
 
 from django.contrib.auth import logout
 

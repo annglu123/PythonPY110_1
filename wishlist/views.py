@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user
-from logic.services import view_in_wishlist, add_to_wishlist, remove_from_wishlist, add_user_to_wishlist
+from logic.services import view_in_wishlist, add_to_wishlist, remove_from_wishlist
 from app_store.models import DATABASE
 
 
@@ -17,37 +17,22 @@ def wishlist_view(request):
                                                          'indent': 4})
         products = []  # Список продуктов
         for id_product in data.get('products'):
-            product = DATABASE[
-                id_product]  # 1. Получите информацию о продукте из DATABASE по его product_id. product будет словарём
+            product = DATABASE[id_product]  # 1. Получите информацию о продукте из DATABASE по его product_id. product будет словарём
             #     product['count'] = count  # 2. в словарь product под ключом "quantity" запишите текущее значение товара в корзине
             #     product['price_total'] = round(count * product['price_after'],
             #                                2)  # добавление общей цены позиции с ограничением в 2 знака
             # # 3. добавьте product в список products
             products.append(product)
-        return render(request, "wishlist/wishlist.html", context={"products": products})
-
-
-# @login_required(login_url='login:login_view')
-# def wishlist_add_view(request, id_product):
-#     if request.method == "GET":
-#         result = add_to_wishlist(request, id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
-#         if result:
-#             return JsonResponse({"answer": "Продукт успешно добавлен в избранное"},
-#                                 json_dumps_params={'ensure_ascii': False})
-#
-#         return JsonResponse({"answer": "Неудачное добавление в избранное"},
-#                             status=404,
-#                             json_dumps_params={'ensure_ascii': False})
+    return render(request, "wishlist/wishlist.html", context={"products": products})
 
 
 @login_required(login_url='login:login_view')
 def wishlist_del_view(request, id_product):
     if request.method == "GET":
-        result = remove_from_wishlist(request,
-                                      id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
+        result = remove_from_wishlist(request, id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
         if result:
             return redirect("wishlist:wishlist_view")  # TODO Вернуть перенаправление на корзину
-        return HttpResponseNotFound("Неудачное удаление из корзины")
+    return HttpResponseNotFound("Неудачное удаление из избранного")
 
 
 @login_required(login_url='login:login_view')
@@ -56,12 +41,11 @@ def wishlist_add_json(request, id_product: str):
     Добавление продукта в избранное и возвращение информации об успехе или неудаче в JSON
     """
     if request.method == "GET":
-        result = add_to_wishlist(request,
-                                 id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
+        result = add_to_wishlist(request, id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
         if result:
             return JsonResponse({"answer": "Продукт успешно добавлен в избранное"},
                                 json_dumps_params={'ensure_ascii': False})
-        return JsonResponse({"answer": "Неудачное добавление в избранное"},
+    return JsonResponse({"answer": "Неудачное добавление в избранное"},
                             status=404,
                             json_dumps_params={'ensure_ascii': False})
 
@@ -75,9 +59,9 @@ def wishlist_del_json(request, id_product: str):
         result = remove_from_wishlist(request,
                                       id_product)  # TODO Вызвать ответственную за это действие функцию и передать необходимые параметры
         if result:
-            return JsonResponse({"answer": "Продукт успешно удалён из корзины"},
+            return JsonResponse({"answer": "Продукт успешно удалён из избранного"},
                                 json_dumps_params={'ensure_ascii': False})
-        return JsonResponse({"answer": "Неудачное удаление из корзины"},
+    return JsonResponse({"answer": "Неудачное удаление из избранного"},
                             status=404,
                             json_dumps_params={'ensure_ascii': False})
 
@@ -93,11 +77,9 @@ def wishlist_json(request):
         if data:
             return JsonResponse(data, json_dumps_params={'ensure_ascii': False,
                                                          'indent': 4})
-        return JsonResponse({"answer": "Пользователь не авторизован"},
+    return JsonResponse({"answer": "Пользователь не авторизован"},
                             status=404,
                             json_dumps_params={'ensure_ascii': False})
 
 
-from django.shortcuts import render
 
-# Create your views here.
