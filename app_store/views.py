@@ -71,8 +71,9 @@ def product_page_view(request, page):
 
 @login_required(login_url='login:login_view')
 def cart_view(request):
+    global products
     if request.method == "GET":
-        current_user = get_user(request).username
+        current_user = get_user(request).username  #
         data = view_in_cart(request)[current_user]  # TODO Вызвать ответственную за это действие функцию
         if request.GET.get('format') == 'json':
             return JsonResponse(data, json_dumps_params={'ensure_ascii': False,

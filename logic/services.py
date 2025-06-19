@@ -1,7 +1,7 @@
 import json
 import os
 
-from django.contrib.auth.middleware import get_user
+from django.contrib.auth import get_user
 
 from app_store.models import DATABASE
 
@@ -108,14 +108,13 @@ def remove_from_cart(request, id_product: str) -> bool:
     # поэтому, чтобы загрузить данные из корзины, не нужно заново писать код.
     # С переменной cart функции remove_from_cart ситуация аналогичная, что с cart функции add_to_cart
 
-    if id_product not in cart[
-        'products']:  # TODO Проверьте, а существует ли такой товар в корзине, если нет, то возвращаем False.
+    if id_product not in cart['products']:  # TODO Проверьте, а существует ли такой товар в корзине, если нет, то возвращаем False.
         return False
     if id_product in cart['products']:
         cart['products'].pop(id_product)
         with open('cart.json', mode='w', encoding='utf-8') as f:
             json.dump(cart_users, f)
-        return True
+    return True
     # TODO Если существует товар, то удаляем ключ 'id_product' у cart['products'].
 
     # TODO Не забываем записать обновленные данные cart в 'cart.json'
@@ -134,6 +133,7 @@ def add_user_to_cart(request, username: str) -> None:
         with open('cart.json', mode='w', encoding='utf-8') as f:
             cart_users[username] = {'products': []}
             json.dump(cart_users, f)
+    return None
 
 
 #
@@ -150,7 +150,6 @@ def view_in_wishlist(request) -> dict:  # Уже реализовано, не н
     cart = {user: {'products': []}}  # Создаём пустую корзину
     with open('wishlist.json', mode='x', encoding='utf-8') as f:  # Создаём файл и записываем туда пустую корзину
         json.dump(cart, f)
-
     return cart
 
 
@@ -192,7 +191,7 @@ def remove_from_wishlist(request, id_product: str) -> bool:
         cart['products'].remove(id_product)
         with open('wishlist.json', mode='w', encoding='utf-8') as f:
             json.dump(wishlist_users, f)
-        return True
+    return True
 
 
 def add_user_to_wishlist(request, username: str) -> None:
@@ -204,7 +203,7 @@ def add_user_to_wishlist(request, username: str) -> None:
         with open('wishlist.json', mode='w', encoding='utf-8') as f:
             wishlist_users[username] = {'products': []}
             json.dump(wishlist_users, f)
-
+    return None
 # if __name__ == "__main__":
 #     # Проверка работоспособности функций view_in_cart, add_to_cart, remove_from_cart
 #     # Для совпадения выходных значений перед запуском скрипта удаляйте появляющийся файл 'cart.json' в папке

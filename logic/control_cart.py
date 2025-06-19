@@ -1,6 +1,7 @@
 import json
 import os
 from app_store.models import DATABASE
+from django.contrib.auth import get_user
 
 PATH_CART = 'cart.json'  # Путь до файла корзины
 
@@ -12,7 +13,7 @@ def view_in_cart(username: str = '') -> dict:  # Уже реализовано, 
     :param username: Имя пользователя
     :return: Содержимое 'cart.json'
     """
-    empty_user_cart = {'products': {}}  # Пустая корзина для пользователя
+    empty_user_cart = {'products': []}  # Пустая корзина для пользователя
 
     if os.path.exists(PATH_CART):  # Если файл с корзиной существует
         with open(PATH_CART, encoding='utf-8') as f:  # Открываем файл
@@ -23,8 +24,8 @@ def view_in_cart(username: str = '') -> dict:  # Уже реализовано, 
         cart = {username: empty_user_cart}
 
     # Запись словаря cart в cart.json
-    with open(PATH_CART, mode='w', encoding='utf-8') as f:  # Создаём файл и записываем корзину
-        json.dump(cart, f)
+    # with open(PATH_CART, mode='w', encoding='utf-8') as f:  # Создаём файл и записываем корзину
+    #     json.dump(cart, f)
 
     return cart  # Возвращаем содержимое корзины
 
@@ -79,14 +80,13 @@ def remove_from_cart(request, id_product: str) -> bool:
     # поэтому, чтобы загрузить данные из корзины, не нужно заново писать код.
     # С переменной cart функции remove_from_cart ситуация аналогичная, что с cart функции add_to_cart
 
-    if id_product not in cart[
-        'products']:  # TODO Проверьте, а существует ли такой товар в корзине, если нет, то возвращаем False.
+    if id_product not in cart['products']:  # TODO Проверьте, а существует ли такой товар в корзине, если нет, то возвращаем False.
         return False
     if id_product in cart['products']:
         cart['products'].pop(id_product)
         with open('cart.json', mode='w', encoding='utf-8') as f:
             json.dump(cart_users, f)
-        return True
+    return True
     # TODO Если существует товар, то удаляем ключ 'id_product' у cart['products'].
 
     # TODO Не забываем записать обновленные данные cart в 'cart.json'

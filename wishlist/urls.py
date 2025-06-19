@@ -6,7 +6,6 @@ from wishlist.views import wishlist_view, wishlist_del_view, wishlist_del_json, 
 #  TODO Импортируйте ваше представление
 
 app_name = 'wishlist'
-
 urlpatterns = [
     path('wishlist/', wishlist_view, name='wishlist_view'),  # TODO Зарегистрируйте обработчик
     path('wishlist/del/<str:id_product>', wishlist_del_view, name = 'del_now'),

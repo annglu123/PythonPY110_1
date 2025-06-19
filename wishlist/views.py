@@ -9,6 +9,7 @@ from app_store.models import DATABASE
 # Create your views here.
 @login_required(login_url='login:login_view')
 def wishlist_view(request):
+    global products
     if request.method == "GET":
         current_user = get_user(request).username  # TODO прописать отображение избранного. Путь до HTML - wishlist/wishlist.html
         data = view_in_wishlist(request)[current_user]  # TODO Вызвать ответственную за это действие функцию
