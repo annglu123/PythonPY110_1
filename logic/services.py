@@ -24,12 +24,12 @@ def filtering_category(database: dict[str, dict],
     """
     if category_key is not None:
 
-        result = [prod for prod in database.values() if prod['category'] == category_key]  # TODO При помощи фильтрации в list comprehension профильтруйте товары по категории (ключ 'category') в продукте database. Или можете использовать
+        result = [prod for prod in DATABASE.values() if prod['category'] == category_key]  # TODO При помощи фильтрации в list comprehension профильтруйте товары по категории (ключ 'category') в продукте database. Или можете использовать
         # обычный цикл или функцию filter. Допустим фильтрацию в list comprehension можно сделать по следующему шаблону
         # [product for product in database.values() if ...] подумать, что за фильтрующее условие можно применить.
         # Сравните значение категории продукта со значением category_key
     else:
-        result = [prod for prod in database.values()]  # TODO Трансформируйте словарь словарей database в список словарей
+        result = [prod for prod in DATABASE.values()]  # TODO Трансформируйте словарь словарей database в список словарей
 
         # В итоге должен быть [dict, dict, dict, ...], где dict - словарь продукта из database
     if ordering_key is not None:
@@ -153,7 +153,7 @@ def view_in_wishlist(request) -> dict:  # Уже реализовано, не н
     return cart
 
 
-def add_to_wishlist(request, id_product: str) -> bool:
+def add_to_wishlist(request, id_product: str) -> None:
     wishlist_users = view_in_wishlist(request)
     cart = wishlist_users[get_user(request).username]
     # if id_product in cart['products'] and id_product in DATABASE:
